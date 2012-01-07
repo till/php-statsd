@@ -3,7 +3,18 @@
 /**
  * Sends statistics to the stats daemon over UDP
  *
- **/
+ * @category Tools
+ * @package  StatsD
+ * @author   Etsy
+ * @author   Till Klampaeckel <till@php.net>
+ * @license  https://github.com/etsy/statsd/blob/master/LICENSE New BSD License
+ */
+class StatsD
+{
+    /**
+     * @var array $config
+     */
+    protected static $config;
 
     /**
      * Pass in configuration, supply defaults if necessary.
