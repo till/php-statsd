@@ -5,7 +5,29 @@
  *
  **/
 
-class StatsD {
+    /**
+     * Pass in configuration, supply defaults if necessary.
+     *
+     * @param array $config
+     *
+     * @return void
+     * @throws InvalidArgumentException When 'enabled' is missing.
+     */
+    public static function init(array $config)
+    {
+        if (!isset($config['enabled'])) {
+            throw new InvalidArgumentException("Config must contain 'enabled' flag.");
+        }
+        if ($config['enabled'] === true) {
+            if (!isset($config['port'])) {
+                $config['port'] = 8125;
+            }
+            if (!isset($config['host'])) {
+                $config['host'] = '127.0.0.1';
+            }
+        }
+        self::$config = $config;
+    }
 
     /**
      * Log timing information
@@ -55,15 +77,16 @@ class StatsD {
             $data[$stat] = "$delta|c";
         }
 
-        StatsD::send($data, $sampleRate);
+        self::send($data, $sampleRate);
     }
 
     /*
      * Squirt the metrics over UDP
      **/
     public static function send($data, $sampleRate=1) {
-        $config = Config::getInstance();
-        if (! $config->isEnabled("statsd")) { return; }
+        if (!self::$config['enabled'] !== true) {
+            return;
+        }
 
         // sampling
         $sampledData = array();
@@ -82,8 +105,9 @@ class StatsD {
 
         // Wrap this in a try/catch - failures in any of this should be silently ignored
         try {
-            $host = $config->getConfig("statsd.host");
-            $port = $config->getConfig("statsd.port");
+            $host = self::$config["host"];
+            $port = self::$config["port"];
+
             $fp = fsockopen("udp://$host", $port, $errno, $errstr);
             if (! $fp) { return; }
             foreach ($sampledData as $stat => $value) {
