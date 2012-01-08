@@ -129,7 +129,10 @@ class StatsD
             $port = self::$config["port"];
 
             $fp = fsockopen("udp://$host", $port, $errno, $errstr);
-            if (! $fp) { return; }
+            if (!$fp) {
+                trigger_error("No statsd @ $host:$port?");
+                return false;
+            }
             foreach ($sampledData as $stat => $value) {
                 fwrite($fp, "$stat:$value");
             }
