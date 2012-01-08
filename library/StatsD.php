@@ -49,7 +49,8 @@ class StatsD
      *
      * @return boolean
      */
-    public static function timing($stat, $time, $sampleRate=1) {
+    public static function timing($stat, $time, $sampleRate=1)
+    {
         return self::send(array($stat => "$time|ms"), $sampleRate);
     }
 
@@ -60,8 +61,9 @@ class StatsD
      * @param float|1 $sampleRate the rate (0-1) for sampling.
      * @return boolean
      **/
-    public static function increment($stats, $sampleRate=1) {
-        self::updateStats($stats, 1, $sampleRate);
+    public static function increment($stats, $sampleRate=1)
+    {
+        return self::updateStats($stats, 1, $sampleRate);
     }
 
     /**
@@ -71,8 +73,9 @@ class StatsD
      * @param float|1 $sampleRate the rate (0-1) for sampling.
      * @return boolean
      **/
-    public static function decrement($stats, $sampleRate=1) {
-        self::updateStats($stats, -1, $sampleRate);
+    public static function decrement($stats, $sampleRate=1)
+    {
+        return self::updateStats($stats, -1, $sampleRate);
     }
 
     /**
