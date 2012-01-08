@@ -84,9 +84,11 @@ class StatsD
      * @param string|array $stats The metric(s) to update. Should be either a string or array of metrics.
      * @param int|1 $delta The amount to increment/decrement each metric by.
      * @param float|1 $sampleRate the rate (0-1) for sampling.
+     *
      * @return boolean
-     **/
-    public static function updateStats($stats, $delta=1, $sampleRate=1) {
+     */
+    public static function updateStats($stats, $delta=1, $sampleRate=1)
+    {
         if (!is_array($stats)) {
             $stats = array($stats);
         }
@@ -100,8 +102,14 @@ class StatsD
 
     /*
      * Squirt the metrics over UDP
-     **/
-    public static function send($data, $sampleRate=1) {
+     *
+     * @param array $data
+     * @param float|1 $sampleRate
+     *
+     * @return boolean
+     */
+    public static function send($data, $sampleRate=1)
+    {
         if (self::$config['enabled'] !== true) {
             return false;
         }
