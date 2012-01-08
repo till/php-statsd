@@ -84,7 +84,9 @@ class StatsD
      * @return boolean
      **/
     public static function updateStats($stats, $delta=1, $sampleRate=1) {
-        if (!is_array($stats)) { $stats = array($stats); }
+        if (!is_array($stats)) {
+            $stats = array($stats);
+        }
         $data = array();
         foreach($stats as $stat) {
             $data[$stat] = "$delta|c";
