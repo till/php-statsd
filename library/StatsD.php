@@ -102,7 +102,7 @@ class StatsD
      * Squirt the metrics over UDP
      **/
     public static function send($data, $sampleRate=1) {
-        if (!self::$config['enabled'] !== true) {
+        if (self::$config['enabled'] !== true) {
             return false;
         }
 
