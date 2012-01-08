@@ -108,7 +108,7 @@ class StatsD
      *
      * @return boolean
      */
-    public static function send($data, $sampleRate=1)
+    public static function send(array $data, $sampleRate=1)
     {
         if (self::$config['enabled'] !== true) {
             return false;
