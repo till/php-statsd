@@ -46,9 +46,11 @@ class StatsD
      * @param string $stats The metric to in log timing info for.
      * @param float $time The ellapsed time (ms) to log
      * @param float|1 $sampleRate the rate (0-1) for sampling.
-     **/
+     *
+     * @return boolean
+     */
     public static function timing($stat, $time, $sampleRate=1) {
-        self::send(array($stat => "$time|ms"), $sampleRate);
+        return self::send(array($stat => "$time|ms"), $sampleRate);
     }
 
     /**
@@ -88,7 +90,7 @@ class StatsD
             $data[$stat] = "$delta|c";
         }
 
-        self::send($data, $sampleRate);
+        return self::send($data, $sampleRate);
     }
 
     /*
@@ -96,7 +98,7 @@ class StatsD
      **/
     public static function send($data, $sampleRate=1) {
         if (!self::$config['enabled'] !== true) {
-            return;
+            return false;
         }
 
         // sampling
@@ -112,7 +114,9 @@ class StatsD
             $sampledData = $data;
         }
 
-        if (empty($sampledData)) { return; }
+        if (empty($sampledData)) {
+            return false;
+        }
 
         // Wrap this in a try/catch - failures in any of this should be silently ignored
         try {
@@ -126,6 +130,8 @@ class StatsD
             }
             fclose($fp);
         } catch (Exception $e) {
+            return false;
         }
+        return true;
     }
 }
