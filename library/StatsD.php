@@ -30,10 +30,10 @@ class StatsD
             throw new InvalidArgumentException("Config must contain 'enabled' flag.");
         }
         if ($config['enabled'] === true) {
-            if (!isset($config['port'])) {
+            if (!isset($config['port']) || empty($config['port'])) {
                 $config['port'] = 8125;
             }
-            if (!isset($config['host'])) {
+            if (!isset($config['host']) || empty($config['host'])) {
                 $config['host'] = '127.0.0.1';
             }
         }
