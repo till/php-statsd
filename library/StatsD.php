@@ -9,7 +9,7 @@
  * @author   Till Klampaeckel <till@php.net>
  * @license  https://github.com/etsy/statsd/blob/master/LICENSE New BSD License
  */
-class Log_StatsD
+class StatsD
 {
     /**
      * @var array $config
