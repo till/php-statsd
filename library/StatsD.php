@@ -138,11 +138,21 @@ class StatsD
 
             $fp = fsockopen("udp://$host", $port, $errno, $errstr);
             if (!$fp) {
-                trigger_error("No statsd @ $host:$port?");
+                /**
+                 * @desc This is unlikely to happen, since UDP is connectionless.
+                 */
+                trigger_error("No statsd @ {$host}:{$port}: {$errstr} ({$errno})");
                 return false;
             }
             foreach ($sampledData as $stat => $value) {
-                fwrite($fp, "$stat:$value");
+                $m      = "{$stat}:{$value}";
+                $status = fwrite($fp, $m);
+                if ($status === false) {
+                    /**
+                     * @desc This is unlikely to show you anything either.
+                     */
+                    trigger_error("Could not write to stream: {$m}");
+                }
             }
             fclose($fp);
         } catch (Exception $e) {
