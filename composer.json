@@ -1,0 +1,17 @@
+{
+    "name": "till/php-statsd",
+    "description": "Simple statsd client for PHP (spin off from etsy's code).",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "till",
+            "email": "till@php.net"
+        }
+    ],
+    "autoload": {
+        "classmap": ["library"]
+    },
+    "require": {
+
+    }
+}
