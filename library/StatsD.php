@@ -29,7 +29,7 @@ class StatsD
         if (!isset($config['enabled'])) {
             throw new InvalidArgumentException("Config must contain 'enabled' flag.");
         }
-        if ($config['enabled'] === true) {
+        if ($config['enabled']) {
             if (!isset($config['port']) || empty($config['port'])) {
                 $config['port'] = 8125;
             }
@@ -110,7 +110,7 @@ class StatsD
      */
     public static function send(array $data, $sampleRate=1)
     {
-        if (self::$config['enabled'] !== true) {
+        if (!self::$config['enabled']) {
             return false;
         }
 
