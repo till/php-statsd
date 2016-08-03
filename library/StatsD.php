@@ -17,6 +17,11 @@ class StatsD
     protected static $config;
 
     /**
+     * @var array $timingStats
+     */
+    protected static $timingStats = [];
+
+    /**
      * Pass in configuration, supply defaults if necessary.
      *
      * @param array $config
@@ -43,7 +48,7 @@ class StatsD
     /**
      * Log timing information
      *
-     * @param string $stats The metric to in log timing info for.
+     * @param string $stat The metric to in log timing info for.
      * @param float $time The ellapsed time (ms) to log
      * @param float|1 $sampleRate the rate (0-1) for sampling.
      *
@@ -52,6 +57,37 @@ class StatsD
     public static function timing($stat, $time, $sampleRate=1)
     {
         return self::send(array($stat => "$time|ms"), $sampleRate);
+    }
+
+    /**
+     * Start timing
+     *
+     * @param string $stat The metric to in log timing info for.
+     *
+     * @return void
+     */
+    public static function timingStart($stat)
+    {
+        self::$timingStats[$stat] = microtime(true);
+    }
+
+    /**
+     * Log timing information for a previously started timing
+     *
+     * @param string $stat The metric to in log timing info for.
+     * @param float|1 $sampleRate the rate (0-1) for sampling.
+     *
+     * @return boolean
+     */
+    public static function timingFinish($stat, $sampleRate=1)
+    {
+        if (!array_key_exists($stat, self::$timingStats)) {
+            return false;
+        }
+        $time = round((microtime(true) - self::$timingStats[$stat]) * 1000);
+        unset(self::$timingStats[$stat]);
+
+        return self::timing($stat, $time, $sampleRate);
     }
 
     /**
